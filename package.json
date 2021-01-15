@@ -1,0 +1,27 @@
+{
+  "name": "isas-air",
+  "version": "1.0.0",
+  "description": "js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon -e js, html app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bunyan": "^1.8.15",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "html": "^1.0.0",
+    "http": "0.0.1-security",
+    "jquery": "^3.5.1",
+    "jquery-circle-progress": "^1.2.2",
+    "mosca": "^2.8.3",
+    "mosquito": "^0.3.3",
+    "mqtt": "^4.2.6",
+    "path": "^0.12.7",
+    "serialport": "^9.0.4"
+  }
+}

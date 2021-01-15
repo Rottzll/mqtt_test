@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="/jquery/dist/jquery.js" type="text/javascript"></script>
+  <title>Main</title>
+
+<style>
+* {margin: 0; padding: 0; }
+#wrap {width : 1960px; margin: 0 auto;}
+  .header {width: 100%; height: 50px; text-align: center; background-color: lightsteelblue;}
+  .menu_PLA {font-size: 100%; text-align: center; color: gray; display: inline-block; }
+  .menu_UVC {font-size: 100%; text-align: center; color: gray; display: inline-block; }
+  .menu_FAN {font-size: 100%; text-align: center; color: black; display: inline-block; }
+#content {overflow: hidden;}
+        #content .article1 {float: left; width: 49%; height: 250px; text-align: center; border: 1px solid gray;}
+        #content .article2 {float: left; width: 49%; height: 250px; text-align: center; border: 1px solid gray;}
+        #content .article3 {float: left; width: 49%; height: 250px; text-align: center; border: 1px solid gray;}
+        #content .article4 {float: left; width: 49%; height: 250px; text-align: center; border: 1px solid gray;}
+.footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
+
+@media (max-width : 1960px){
+  #wrap {width: 100%;}
+}
+
+@media (max-width : 1220px){
+  #wrap {width: 100%;}
+}
+@media (max-width : 768px){
+  #wrap {width: 100%;}
+}
+@media (max-width : 480px){
+  .header {width : 100%; height: 30px;}
+  .menu_PLA {font-size: 60%;}
+  .menu_UVC {font-size: 60%;}
+  .menu_FAN {font-size: 60%;}
+  #content .article1 {width: 99%; height: 150px; font-size: 70%;}
+  #content .article2 {width: 99%; height: 150px; font-size: 70%;}
+  #content .article3 {width: 99%; height: 150px; font-size: 70%;}
+  #content .article4 {width: 99%; height: 150px; font-size: 70%;}
+}
+</style>
+
+  <style>
+  
+  </style>
+</head>
+
+<body>
+  <div id="wrap">
+    <header class="header">
+      <h3>
+        <p class="menu_PLA" name="state_P"> PLA </p>
+        <p class="menu_UVC" name="state_U"> UVC </p>
+        <p class="menu_FAN"> FAN </p>
+      </h3>
+      <h4 class="fan_speed"> SPEED : <%= fan_speed %> <h4>
+        
+      </header>
+
+    <section id="content" >
+      <article class="article1" onclick="location.href='/sub'">
+        <h3>미세먼지</h3><br>
+        <h2>[값]</h2>
+        <h5> ug/mg3 </h5>
+        <br><br>
+        <h1>[현 상태]</h1>
+      </article>
+
+      <article class="article2" onclick="location.href='/sub'">
+        <h3>가스</h3><br>
+        <h2>[값]</h2>
+        <h5> ug/mg3 </h5>
+        <br><br>
+        <h1>[현 상태]</h1>
+      </article>
+
+			<article class="article3" onclick="location.href='/sub'">
+        <h3>유해화학</h3><br>
+        <h2>[값]</h2>
+        <h5> ppm </h5>
+        <br><br>
+        <h1>[현 상태]</h1>
+      </article>
+
+			<article class="article4" onclick="location.href='/sub'">
+        <h3>공기질</h3><br>
+        <h2>[값]</h2>
+        <h5> ug/mg3 </h5>
+        <br><br>
+        <h1>[현 상태]</h1>
+      </article>
+    </section>
+    <footer class="footer"> </footer>
+</div>
+    
+<script>
+  $(function(){
+    var state_P = <%= state_P%>;
+    var state_U = <%= state_U%>;
+    var fan_speed = <%= fan_speed%>;
+        $(document).ready(function(){
+          $(".fan_speed").html('<h4>SPEED : <%= fan_speed%></h4>')
+          if(state_P==1){
+            $(".menu_PLA").css("color", "black");
+          }
+          else if(state_P==0){
+            $(".menu_PLA").css("color", "gray");
+          }
+          if(state_U==1){
+            $(".menu_UVC").css("color", "black");
+          }
+          else if(state_U==0){
+            $(".menu_UVC").css("color", "gray");
+          }
+        });
+
+        $(".menu_PLA").on("click", function() {
+          if(state_P==0){
+            $(".menu_PLA").css("color", "black");
+              state_P++;
+          }
+          else if(state_P==1){
+            $(".menu_PLA").css("color", "gray");
+              state_P--;
+          }
+          $.ajax({
+          url: '/',
+          dataType: 'json',
+          type: 'POST',
+          data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
+          success: function(result) {
+            if (result) {
+              console.log("result")
+            }
+          }
+        });
+        });
+
+        $(".menu_UVC").on("click", function() {
+          if(state_U==0){
+            $(".menu_UVC").css("color", "black");
+              state_U++;
+          }
+          else if(state_U==1){
+            $(".menu_UVC").css("color", "gray");
+              state_U--;
+          }
+          $.ajax({
+          url: '/',
+          dataType: 'json',
+          type: 'POST',
+          data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
+          success: function(result) {
+            if (result) {
+              console.log("result")
+            }
+          }
+        });
+        });
+        
+        $(".menu_FAN").on("click", function() {
+          fan_speed++;
+          
+          if(fan_speed==6)
+            fan_speed=1;
+          $.ajax({
+            url: '/',
+            dataType: 'json',
+            type: 'POST',
+            data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
+            success: function(result) {
+            if (result) {
+              console.log("result")
+            }
+          }
+        });
+        });
+        
+
+      });
+</script>
+
+</body>
+</html>
