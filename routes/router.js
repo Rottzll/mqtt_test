@@ -24,7 +24,7 @@ router.post('/', function(req, res){
   fan_speed = req.body.fan_speed;
 
     console.log('main POST Parameter = ' + state_P +" " + state_U);
-    var result ='Succese';
+    var result = fan_speed;
     res.send({result:result});
 
 });

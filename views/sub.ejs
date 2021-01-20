@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">>
   <title></title>
   <script src="/jquery/dist/jquery.js" type="text/javascript"></script>
   <script src="https://rawgit.com/kottenator/jquery-circle-progress/1.2.1/dist/circle-progress.js"></script>
@@ -30,11 +30,10 @@ footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
   #wrap {width: 100%;}
 }
 @media (max-width : 480px){
-  #wrap {width: 100%;}
-  header {height: 50px;}
-  .menu_PLA {font-size: 60%;}
+  .header {width : 100%; height: 30px; font-size: 60%;}
+  /* .menu_PLA {font-size: 60%;}
   .menu_UVC {font-size: 60%;}
-  .menu_FAN {font-size: 60%;}
+  .menu_FAN {font-size: 60%;} */
   aside {width: 100%; height: 300px; font-size: 60%;}
   section {width: 100%; height: 300px; font-size: 60%;}
 }
@@ -53,29 +52,19 @@ footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
 </style>
 
 
-<style>
-  .bars {
-    width: 0px;
-    margin: 0 auto;
-    height: 150px;
-    color: black;
-    text-align: left;
-    border-right: 0; border: 1px solid black;
-}
-</style>
-
 </head>
 
 <body>
   <div id="wrap">
     <header>
       <h3>
-      <form action="/sub" method="post">
         <p class="menu_PLA"> PLA </p>
         <p class="menu_UVC"> UVC </p>
         <p class="menu_FAN"> FAN </p>
-      </form>
       </h3>
+      <div id="fan"> SPEED : <%= fan_speed%> </div>
+       <a href="/"> <h5>되돌아가기</h5> </a>
+
     </header>
     <aside>  
       <br><br><br><br><br><br>
@@ -94,9 +83,12 @@ footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
     <footer></footer>
 </div>
     
-  <script type="text/javascript">
-      var state_P = <%= state_P%>;
-      var state_U = <%= state_U%>;
+<script type="text/javascript">
+  $(function(){
+    var state_P = <%= state_P%>;
+    var state_U = <%= state_U%>;
+    var fan_speed = <%= fan_speed%>;
+
         $(document).ready(function(){
           if(state_P==1){
             $(".menu_PLA").css("color", "black");
@@ -112,7 +104,6 @@ footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
           }
         });
 
-      $(function(){
         $('.circle').circleProgress({
           value: <%= persent %>,
           fill: {gradient: [['blue',1],['blue',1]], gradientAngle: Math.PI / 4}
@@ -130,14 +121,12 @@ footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
               state_P--;
           }
           $.ajax({
-          url: '/sub',
+          url: '/',
           dataType: 'json',
           type: 'POST',
-          data: {state_P:state_P, state_U:state_U},
+          data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
           success: function(result) {
-            if (result) {
-              console.log("result")
-            }
+            
           }
         });
         });
@@ -152,18 +141,36 @@ footer {clear: both; width: 100%; height: 300px; background :lightslategrey}
               state_U--;
           }
           $.ajax({
-          url: '/sub',
+          url: '/',
           dataType: 'json',
           type: 'POST',
-          data: {state_P:state_P, state_U:state_U},
+          data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
           success: function(result) {
-            if (result) {
-              console.log("result")
-            }
+          
           }
         });
         });
+        
+        $(".menu_FAN").on("click", function() {
+          fan_speed++;
+
+          if(fan_speed==6)
+            fan_speed=1;
+
+          $.ajax({
+            url: '/',
+            dataType: 'json',
+            type: 'POST',
+            data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
+          })
+          .done(function (result) { 
+            $(document).load(window.location.href='/sub');
+           })
+          .fail(function (jqXHR, textStatus, errorThrown) { serrorFunction(); });
+        });
       });
+        
+      
   </script>
 </body>
 </html>

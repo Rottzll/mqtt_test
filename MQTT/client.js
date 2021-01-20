@@ -1,38 +1,7 @@
 var mqtt    = require('mqtt');
 var count =0;
-var client  = mqtt.connect("mqtt://test.mosquitto.org",{clientId:"mqttjs01"});
+var client  = mqtt.connect("tcp://test.mosquitto.org",{clientId:"mqttjs01"});
 console.log("connected flag  " + client.connected);
-
-//handle incoming messages
-client.on('message',function(topic, message, packet){
-	console.log("message is "+ message);
-	console.log("topic is "+ topic);
-});
-
-
-client.on("connect",function(){	
-    console.log("connected  "+ client.connected);
-})
-
-//handle errors
-client.on("error",function(error){
-    console.log("Can't connect" + error);
-    process.exit(1)
-});
-//publish
-
-function publish(topic,msg,options){
-    console.log("publishing",msg);
-        if (client.connected == true) {
-            client.publish(topic,msg,options);
-        }
-    count+=1;
-        if (count==2) //ens script
-	        clearTimeout(timer_id); //stop timer
-            console.log("end of script");   
-            client.end();
-}
-//////////////
 
 var options={
     retain:true,
@@ -52,8 +21,38 @@ client.subscribe(topic); //single topic
 client.subscribe(topic_list); //topic list
 client.subscribe(topic_o); //object
 
+function publish(topic,msg,options){
+    console.log("publishing",msg);
+        if (client.connected == true) {
+            client.publish(topic,msg,options);
+        }
+}
+
 var timer_id = setInterval ( function() {
     publish(topic,message,options);
     },5000);
+
+//handle incoming messages
+client.on('message',function(topic, message, packet){
+	console.log("message is "+ message);
+	console.log("topic is "+ topic);
+});
+
+
+client.on("connect",function(){	
+    console.log("connected  "+ client.connected);
+})
+
+//handle errors
+client.on("error",function(error){
+    console.log("Can't connect" + error);
+    process.exit(1)
+});
+//publish
+
+
+//////////////
+
+
 
 //notice this is printed even before we connect

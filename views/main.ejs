@@ -32,10 +32,10 @@
   #wrap {width: 100%;}
 }
 @media (max-width : 480px){
-  .header {width : 100%; height: 30px;}
-  .menu_PLA {font-size: 60%;}
+  .header {width : 100%; height: 30px; font-size: 60%;}
+  /* .menu_PLA {font-size: 60%;}
   .menu_UVC {font-size: 60%;}
-  .menu_FAN {font-size: 60%;}
+  .menu_FAN {font-size: 60%;} */
   #content .article1 {width: 99%; height: 150px; font-size: 70%;}
   #content .article2 {width: 99%; height: 150px; font-size: 70%;}
   #content .article3 {width: 99%; height: 150px; font-size: 70%;}
@@ -43,9 +43,6 @@
 }
 </style>
 
-  <style>
-  
-  </style>
 </head>
 
 <body>
@@ -56,7 +53,7 @@
         <p class="menu_UVC" name="state_U"> UVC </p>
         <p class="menu_FAN"> FAN </p>
       </h3>
-      <h4 class="fan_speed"> SPEED : <%= fan_speed %> <h4>
+      <div id="fan"> SPEED : <%= fan_speed%> </div>
         
       </header>
 
@@ -101,8 +98,8 @@
     var state_P = <%= state_P%>;
     var state_U = <%= state_U%>;
     var fan_speed = <%= fan_speed%>;
+
         $(document).ready(function(){
-          $(".fan_speed").html('<h4>SPEED : <%= fan_speed%></h4>')
           if(state_P==1){
             $(".menu_PLA").css("color", "black");
           }
@@ -132,9 +129,7 @@
           type: 'POST',
           data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
           success: function(result) {
-            if (result) {
-              console.log("result")
-            }
+            
           }
         });
         });
@@ -154,32 +149,29 @@
           type: 'POST',
           data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
           success: function(result) {
-            if (result) {
-              console.log("result")
-            }
+          
           }
         });
         });
         
         $(".menu_FAN").on("click", function() {
           fan_speed++;
-          
+
           if(fan_speed==6)
             fan_speed=1;
+
           $.ajax({
             url: '/',
             dataType: 'json',
             type: 'POST',
             data: {state_P:state_P, state_U:state_U, fan_speed:fan_speed},
-            success: function(result) {
-            if (result) {
-              console.log("result")
-            }
-          }
+          })
+          .done(function (result) { 
+            $(document).load(window.location.href='/');
+           })
+          .fail(function (jqXHR, textStatus, errorThrown) { serrorFunction(); });
+          
         });
-        });
-        
-
       });
 </script>
 
